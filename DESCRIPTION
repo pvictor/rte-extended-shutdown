@@ -1,0 +1,21 @@
+Package: extendedshutdown
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut", "cre")),
+    person("Fabiola", "Aravena-Rojas", email = "fabiola.aravena-rojas@rte-france.com", role = c("aut")),
+    person("RTE", role = c("cph", "fnd"))
+  )
+Description: What the package does (one paragraph).
+License: GPL (>= 2) | file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    antaresEditObject,
+    antaresRead,
+    readxl,
+    janitor,
+    data.table,
+    lubridate,
+    stringr
+RoxygenNote: 6.1.0
