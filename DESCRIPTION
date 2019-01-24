@@ -17,5 +17,6 @@ Imports:
     janitor,
     data.table,
     lubridate,
-    stringr
-RoxygenNote: 6.1.0
+    stringr,
+    stringi
+RoxygenNote: 6.1.1
