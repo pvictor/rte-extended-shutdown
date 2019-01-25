@@ -1,12 +1,12 @@
 Package: extendedshutdown
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Extended Shutdown Simulation with 'Antares' for Power Groups
+Version: 0.0.0.9100
 Authors@R: c(
     person("Victor", "Perrier", email = "victor.perrier@dreamRs.fr", role = c("aut", "cre")),
     person("Fabiola", "Aravena-Rojas", email = "fabiola.aravena-rojas@rte-france.com", role = c("aut")),
     person("RTE", role = c("cph", "fnd"))
   )
-Description: What the package does (one paragraph).
+Description: Setup an 'Antares' study to simulate shutdown of power groups.
 License: GPL (>= 2) | file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -18,5 +18,6 @@ Imports:
     data.table,
     lubridate,
     stringr,
-    stringi
+    stringi,
+    zoo
 RoxygenNote: 6.1.1

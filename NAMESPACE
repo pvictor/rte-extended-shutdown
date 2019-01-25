@@ -2,6 +2,7 @@
 
 export(create_clusters)
 export(read_calendar)
+export(read_cluster_desc)
 export(read_kd_cho)
 export(setup_study)
 importFrom(antaresEditObject,createArea)
@@ -22,3 +23,4 @@ importFrom(stats,setNames)
 importFrom(stringi,stri_replace_all_charclass)
 importFrom(stringr,str_replace_all)
 importFrom(utils,packageVersion)
+importFrom(zoo,na.locf)
