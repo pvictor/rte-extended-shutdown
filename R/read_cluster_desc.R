@@ -8,7 +8,7 @@
 #' 
 #' @importFrom readxl read_excel
 #' @importFrom janitor clean_names
-#' @importFrom data.table setDT :=
+#' @importFrom data.table setDT := setnames
 #' @importFrom zoo na.locf
 #'
 #' @examples

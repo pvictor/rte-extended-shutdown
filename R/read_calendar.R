@@ -16,7 +16,7 @@ read_calendar <- function(path) {
   setDT(dat)
   dat[, duree_prolongation_jour := as.numeric(difftime(date_de_fin_avec_prolongation, date_de_fin_sans_prolongation, units = "day"))]
   dat[, duree_prolongation_mean := as.numeric(duree_prolongation_semaine) * 7 + 1]
-  return(dat)
+  dat[]
 }
 
 

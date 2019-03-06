@@ -13,16 +13,6 @@
 #' @importFrom stringi stri_replace_all_charclass
 #'
 read_kd_cho <- function(path) {
-  if (!requireNamespace("readxl", quietly = TRUE))
-    stop("Please install package `readxl`", call. = FALSE)
-  if (!requireNamespace("data.table", quietly = TRUE))
-    stop("Please install package `data.table`", call. = FALSE)
-  if (!requireNamespace("janitor", quietly = TRUE))
-    stop("Please install package `janitor`", call. = FALSE)
-  if (!requireNamespace("stringi", quietly = TRUE))
-    stop("Please install package `stringi`", call. = FALSE)
-  if (packageVersion("readxl") < "1.2.0") 
-    warning("In case of errors, please update package `readxl`", call. = FALSE)
   kd_cho <- readxl::read_excel(path = path, sheet = "Kd CHO", skip = 8)
   kd_cho <- janitor::clean_names(kd_cho)
   setDT(kd_cho)

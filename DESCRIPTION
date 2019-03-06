@@ -13,7 +13,7 @@ LazyData: true
 Imports: 
     antaresEditObject,
     antaresRead,
-    readxl,
+    readxl (>= 1.2.0),
     janitor,
     data.table,
     lubridate,
