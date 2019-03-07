@@ -1,5 +1,5 @@
 
-#' Compute Kivt coefficient
+#' Compute Kipr coefficient
 #'
 #' @param calendar Calendar data read with \code{\link{read_calendar}}.
 #' @param clusters_desc Clusters / groups description read with \code{\link{read_cluster_desc}}.
@@ -18,11 +18,11 @@
 #' clusters <- read_cluster_desc("HypothesesRTE_CHO-4145.xlsx")
 #' 
 #' 
-#' # Kivt computation
-#' kivt <- compute_kivt(calendar, clusters)
-#' kivt
+#' # Kipr computation
+#' kipr <- compute_kipr(calendar, clusters)
+#' kipr
 #' }
-compute_kivt <- function(calendar, clusters_desc) {
+compute_kipr <- function(calendar, clusters_desc) {
   
   calendar <- copy(calendar)
   clusters_desc <- copy(clusters_desc)
@@ -35,10 +35,10 @@ compute_kivt <- function(calendar, clusters_desc) {
   week_groups <- weekcal[calendar[, list(
     .id,
     group = tranche,
-    shutdown_start = as.Date(date_debut),
-    shutdown_end = as.Date(date_de_fin_sans_prolongation)
+    shutdown_start = as.Date(date_de_fin_sans_prolongation) + 1,
+    shutdown_end = as.Date(date_de_fin_avec_prolongation)
   )], on = ".id", allow.cartesian = TRUE]
-
+  
   week_groups[, n_overlaps := n_overlaps(week_start, week_end, shutdown_start, shutdown_end)]
   
   weekclus <- merge(
@@ -52,11 +52,11 @@ compute_kivt <- function(calendar, clusters_desc) {
   setorder(weekclus, week, group, -n_overlaps)
   weekclus <- unique(weekclus, by = c("week", "group"))
   
-  coef_kivt <- weekclus[, list(
-    kivt = sum(pcn_mw * n_overlaps / 7) / sum(pcn_mw) * 100,
+  coef_kipr <- weekclus[, list(
+    kipr = sum(pcn_mw * n_overlaps / 7) / sum(pcn_mw) * 100,
     n_days = sum(n_overlaps), group_power = sum(pcn_mw),
     n = .N, n_group = uniqueN(group)
   ), by = list(week, week_start, week_end, type_groupe)]
-  setorder(coef_kivt, week_start, type_groupe)
-  coef_kivt[]
+  setorder(coef_kipr, week_start, type_groupe)
+  coef_kipr[]
 }
