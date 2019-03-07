@@ -35,7 +35,7 @@ compute_kipr <- function(calendar, clusters_desc) {
   week_groups <- weekcal[calendar[, list(
     .id,
     group = tranche,
-    shutdown_start = as.Date(date_de_fin_sans_prolongation) + 1,
+    shutdown_start = as.Date(date_de_fin_sans_prolongation),
     shutdown_end = as.Date(date_de_fin_avec_prolongation)
   )], on = ".id", allow.cartesian = TRUE]
   

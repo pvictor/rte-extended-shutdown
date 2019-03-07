@@ -36,7 +36,7 @@ compute_kivt <- function(calendar, clusters_desc) {
     .id,
     group = tranche,
     shutdown_start = as.Date(date_debut),
-    shutdown_end = as.Date(date_de_fin_sans_prolongation)
+    shutdown_end = as.Date(date_de_fin_sans_prolongation) - 1
   )], on = ".id", allow.cartesian = TRUE]
 
   week_groups[, n_overlaps := n_overlaps(week_start, week_end, shutdown_start, shutdown_end)]
