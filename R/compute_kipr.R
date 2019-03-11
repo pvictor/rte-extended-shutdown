@@ -41,22 +41,25 @@ compute_kipr <- function(calendar, clusters_desc) {
   
   week_groups[, n_overlaps := n_overlaps(week_start, week_end, shutdown_start, shutdown_end)]
   
+  clusters_desc <- clusters_desc[, list(group = corresp_groupes, type_groupe, pcn_mw)]
+  clusters_desc[, pcn_mw := as.numeric(pcn_mw)]
+  clusters_desc[, group_power := sum(pcn_mw), by = type_groupe]
+  
   weekclus <- merge(
     x = week_groups, 
-    y = clusters_desc[, list(group = corresp_groupes, type_groupe, pcn_mw)],
+    y = clusters_desc,
     by = "group", all.x = TRUE, all.y = FALSE
   )
   weekclus <- weekclus[!is.na(type_groupe)]
-  weekclus[, pcn_mw := as.numeric(pcn_mw)]
   
   setorder(weekclus, week, group, -n_overlaps)
   weekclus <- unique(weekclus, by = c("week", "group"))
   
   coef_kipr <- weekclus[, list(
-    kipr = sum(pcn_mw * n_overlaps / 7) / sum(pcn_mw) * 100,
-    n_days = sum(n_overlaps), group_power = sum(pcn_mw),
+    kipr = sum(pcn_mw * n_overlaps / 7) / group_power * 100,
+    n_days = sum(n_overlaps), 
     n = .N, n_group = uniqueN(group)
-  ), by = list(week, week_start, week_end, type_groupe)]
+  ), by = list(week, week_start, week_end, type_groupe, group_power)]
   setorder(coef_kipr, week_start, type_groupe)
   coef_kipr[]
 }

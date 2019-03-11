@@ -34,6 +34,11 @@ read_cluster_desc <- function(path) {
   clusdesc[is.na(pcn_mw), type_groupe := nom]
   clusdesc[, type_groupe := zoo::na.locf(type_groupe)]
   
+  # wrong corresp
+  clusdesc[corresp_groupes == "SSEA2T1", corresp_groupes := "SSEA2T 1"]
+  clusdesc[corresp_groupes == "SSEA2T2", corresp_groupes := "SSEA2T 2"]
+  clusdesc[corresp_groupes == "FLAMANVILLE 3", corresp_groupes := "FLAMAT 3"]
+  
   clusdesc <- clusdesc[!is.na(pcn_mw)]
   clusdesc
 }

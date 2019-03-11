@@ -4,4 +4,4 @@ utils::globalVariables(c("tranche", "date_de_fin_avec_prolongation", "date_de_fi
                          ".SD", "palier", "n_days", "patterns", "nom", "pcn_mw", "type_groupe", "x7",
                          "dates", "year", "week", "saturdays", "n", ".N",
                          ".id", "corresp_groupes", "date_debut", "group", "shutdown_end", "shutdown_start",
-                         "week_end", "week_start"))
+                         "week_end", "week_start", "group_power"))
