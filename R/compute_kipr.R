@@ -3,6 +3,7 @@
 #'
 #' @param calendar Calendar data read with \code{\link{read_calendar}}.
 #' @param clusters_desc Clusters / groups description read with \code{\link{read_cluster_desc}}.
+#' @param years Years to consider, if \code{NULL} (default), year range from \code{calendar} will be used.
 #'
 #' @return a \code{data.table}
 #' @export
@@ -22,12 +23,17 @@
 #' kipr <- compute_kipr(calendar, clusters)
 #' kipr
 #' }
-compute_kipr <- function(calendar, clusters_desc) {
+compute_kipr <- function(calendar, clusters_desc, years = NULL) {
   
   calendar <- copy(calendar)
   clusters_desc <- copy(clusters_desc)
   
-  weekcal <- build_weekcal()
+  if (is.null(years)) {
+    years <- range(calendar$date_debut, na.rm = TRUE)
+    years <- format(years, format = "%Y")
+  }
+  
+  weekcal <- build_weekcal(start = years[1], end = years[2])
   
   weekcal[, .id := 1]
   calendar[, .id := 1]

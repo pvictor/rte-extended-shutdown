@@ -14,7 +14,7 @@
 #' 
 #' build_weekcal()
 #' 
-build_weekcal <- function(start = 2018, end = 2019) {
+build_weekcal <- function(start = 2018, end = 2020) {
   weekcal <- data.table(
     dates = seq(
       from = as.Date(paste0(start, "-01-01")) - 7,

@@ -4,12 +4,14 @@
 \alias{compute_kipr}
 \title{Compute Kipr coefficient}
 \usage{
-compute_kipr(calendar, clusters_desc)
+compute_kipr(calendar, clusters_desc, years = NULL)
 }
 \arguments{
 \item{calendar}{Calendar data read with \code{\link{read_calendar}}.}
 
 \item{clusters_desc}{Clusters / groups description read with \code{\link{read_cluster_desc}}.}
+
+\item{years}{Years to consider, if \code{NULL} (default), year range from \code{calendar} will be used.}
 }
 \value{
 a \code{data.table}

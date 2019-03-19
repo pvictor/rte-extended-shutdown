@@ -4,7 +4,7 @@
 \alias{build_weekcal}
 \title{Build Week calendar}
 \usage{
-build_weekcal(start = 2018, end = 2019)
+build_weekcal(start = 2018, end = 2020)
 }
 \arguments{
 \item{start}{Starting year}
