@@ -41,5 +41,13 @@ read_cluster_desc <- function(path) {
   clusdesc <- clusdesc[corresp_groupes != "FLAMANVILLE 3"]
   
   clusdesc <- clusdesc[!is.na(pcn_mw)]
+  
+  code_palier_dic <- data.table(
+    type_groupe = c("Nucl\u00e9aire 1300", "Nucl\u00e9aire 900", "Nucl\u00e9aire N4"),
+    code_palier = c("p4", "cp0_cp_cp2", "n4")
+  )
+  
+  clusdesc <- merge(x = clusdesc, y = code_palier_dic, all.x = TRUE)
+  
   clusdesc
 }

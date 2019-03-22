@@ -4,10 +4,20 @@
 \alias{create_clusters}
 \title{Create clusters}
 \usage{
-create_clusters(calendar, opts = simOptions())
+create_clusters(calendar, clusters_desc, kd_cho,
+  law_planned = "geometric", volatility_planned = 1,
+  opts = simOptions())
 }
 \arguments{
-\item{calendar}{Calendar data read with \code{read_calendar}.}
+\item{calendar}{Calendar data read with \code{\link{read_calendar}}.}
+
+\item{clusters_desc}{Clusters / groups description read with \code{\link{read_cluster_desc}}.}
+
+\item{kd_cho}{Kd coefficients read with \code{\link{read_kd_cho}}.}
+
+\item{law_planned}{Law to use in Antares.}
+
+\item{volatility_planned}{Volatility for the law.}
 
 \item{opts}{List of simulation parameters returned by the function
 \code{setSimulationPath}}

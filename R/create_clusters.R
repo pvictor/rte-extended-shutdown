@@ -1,7 +1,11 @@
 
 #' Create clusters
 #'
-#' @param calendar Calendar data read with \code{read_calendar}.
+#' @param calendar Calendar data read with \code{\link{read_calendar}}.
+#' @param clusters_desc Clusters / groups description read with \code{\link{read_cluster_desc}}.
+#' @param kd_cho Kd coefficients read with \code{\link{read_kd_cho}}.
+#' @param law_planned Law to use in Antares.
+#' @param volatility_planned Volatility for the law.
 #' @param opts
 #'   List of simulation parameters returned by the function
 #'   \code{setSimulationPath} 
@@ -13,7 +17,7 @@
 #' @importFrom lubridate hours days
 #' @importFrom stats setNames
 #' @importFrom stringr str_replace_all
-create_clusters <- function(calendar, opts = simOptions()) {
+create_clusters <- function(calendar, clusters_desc, kd_cho, law_planned = "geometric", volatility_planned = 1, opts = simOptions()) {
   
   # Modulation data
   modulation_list <- lapply(
@@ -47,8 +51,11 @@ create_clusters <- function(calendar, opts = simOptions()) {
             }
           }
         )
+        
+        coef_clus <- get_clusters_coef(cluster, clusters_desc, kd_cho, "2018-07-01")
+        
         datetime_prolongation <- unlist(datetime_prolongation)
-        capacity_modulation <- (!datetime_study %in% datetime_prolongation) * 1
+        capacity_modulation <- (!datetime_study %in% datetime_prolongation) * rep(coef_clus$abat_rso, each = 24)
         matrix(
           data = c(
             rep(1, times = 8760 * 2),
@@ -60,7 +67,7 @@ create_clusters <- function(calendar, opts = simOptions()) {
       }
     }
   )
-  
+
   # Preprop data
   data_list <- lapply(
     X = setNames(
@@ -90,6 +97,9 @@ create_clusters <- function(calendar, opts = simOptions()) {
           ),
           ncol = 6
         )
+        
+        coef_clus <- get_clusters_coef(cluster, clusters_desc, kd_cho, "2018-07-01")
+        
         res[date_reprise, 2] <- duree_prolongation_mean
         res[date_reprise, 4] <- 1
         return(res)
@@ -110,7 +120,8 @@ create_clusters <- function(calendar, opts = simOptions()) {
       `must-run` = FALSE,
       `min-down-time` = 1L,
       `min-up-time` = 168L,
-      `volatility.planned` = 1,
+      `volatility.planned` = volatility_planned,
+      `law.planned` = law_planned,
       prepro_data = data_list[[cluster]], 
       prepro_modulation = modulation_list[[cluster]]
     )
@@ -119,4 +130,19 @@ create_clusters <- function(calendar, opts = simOptions()) {
   invisible(opts)
 }
 
+
+#' @importFrom lubridate years
+get_clusters_coef <- function(name, clusters_desc, kd_cho, date_study) {
+  code_pal <- clusters_desc[corresp_groupes == name, c(code_palier)]
+  coefkd_week <- kd_cho[code_palier %in% code_pal, list(week = n_sem_annee, abat_rso, kidispo_hqe)]
+  
+  coefkd_week <- merge(x = coefkd_week, y = build_weekcal(), all.x = TRUE, all.y = FALSE)
+  
+  coefkd_week <- coefkd_week[rep(seq_len(.N), each = 7)]
+  coefkd_week[, num_seq := seq_len(.N) - 1, by = week]
+  coefkd_week[, week_start := week_start + num_seq]
+  coefkd_week <- coefkd_week[, list(date = week_start, abat_rso, kidispo_hqe)]
+  coefkd_week <- coefkd_week[date >= as.Date(date_study) & date < as.Date(date_study) + lubridate::years(1)]
+  coefkd_week[]
+}
 
