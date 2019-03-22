@@ -98,7 +98,26 @@ create_clusters <- function(calendar, clusters_desc, kd_cho, law_planned = "geom
           ncol = 6
         )
         
+        date_arret_prolongation <- lapply(
+          X = seq_len(nrow(dat)), 
+          FUN = function(i) {
+            if (dat$date_de_fin_sans_prolongation[i] > dat$date_debut[i]) {
+              res <- seq(
+                from = as.Date(dat$date_debut[i]), 
+                to = as.Date(dat$date_de_fin_avec_prolongation[i]) - days(1), 
+                by = "1 day"
+              )
+              as.character(res)
+            }
+          }
+        )
+        
         coef_clus <- get_clusters_coef(cluster, clusters_desc, kd_cho, "2018-07-01")
+        date_study <- as.character(date_study)
+        date_arret_prolongation <- unlist(date_arret_prolongation)
+        fo_rate <- (!date_study %in% date_arret_prolongation) * (1 - coef_clus$kidispo_hqe)
+        
+        res[, 3] <- fo_rate
         
         res[date_reprise, 2] <- duree_prolongation_mean
         res[date_reprise, 4] <- 1
@@ -108,6 +127,10 @@ create_clusters <- function(calendar, clusters_desc, kd_cho, law_planned = "geom
   )
   
   for (cluster in unique(calendar$tranche)) {
+    
+    code_pal <- clusters_desc[corresp_groupes == cluster, c(code_palier)]
+    cluster_infos <- descr_clusters(paste0("nuclear_", code_pal))
+    
     opts <- createCluster(
       opts = opts,
       area = "area", 
@@ -115,13 +138,22 @@ create_clusters <- function(calendar, clusters_desc, kd_cho, law_planned = "geom
       add_prefix = FALSE,
       group = "nuclear",
       unitcount = 1L,
-      nominalcapacity = 1000,
-      `min-stable-power` = 100,
+      nominalcapacity = clusters_desc[corresp_groupes == cluster, c(pcn_mw)],
+      `min-stable-power` = clusters_desc[corresp_groupes == cluster, c(pmin_mw)],
       `must-run` = FALSE,
-      `min-down-time` = 1L,
-      `min-up-time` = 168L,
+      # `min-down-time` = 1L,
+      # `min-up-time` = 168L,
       `volatility.planned` = volatility_planned,
       `law.planned` = law_planned,
+      
+      `min-up-time` = cluster_infos[["min-up-time"]],
+      `min-down-time` = cluster_infos[["min-down-time"]],
+      spinning = cluster_infos[["spinning"]],
+      `marginal-cost` = cluster_infos[["marginal-cost"]],
+      `spread-cost` = cluster_infos[["spread-cost"]],
+      `startup-cost` = cluster_infos[["startup-cost"]],
+      `market-bid-cost` = cluster_infos[["market-bid-cost"]],
+      
       prepro_data = data_list[[cluster]], 
       prepro_modulation = modulation_list[[cluster]]
     )
