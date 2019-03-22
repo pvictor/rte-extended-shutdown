@@ -20,7 +20,7 @@ read_planning_rte <- function(path, clusters_desc) {
   corresp_gp <- corresp_gps()
   plan_rte <- merge(
     x = plan_rte,
-    y = corresp_gp[, list(groupe = Name, code_gp = code_groupe, name_desc = `Cluster BP`)],
+    y = corresp_gp,
     by = "groupe"
   )
   plan_rte[, groupe := str_replace_all(groupe, "[:space:]", "")]
@@ -32,6 +32,7 @@ read_planning_rte <- function(path, clusters_desc) {
     x = plan_rte, all.x = TRUE, all.y = FALSE, by = "groupe",
     y = clusters_desc[, list(groupe = nom, pcn_mw, pmin_mw)]
   )
+  plan_rte[, `:=`(pcn_mw = as.numeric(pcn_mw), pmin_mw = as.numeric(pmin_mw))]
   plan_rte[]
 }
 
