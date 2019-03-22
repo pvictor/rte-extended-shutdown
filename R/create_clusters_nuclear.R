@@ -1,5 +1,5 @@
 
-#' Create clusters
+#' Create nuclear clusters
 #'
 #' @param calendar Calendar data read with \code{\link{read_calendar}}.
 #' @param clusters_desc Clusters / groups description read with \code{\link{read_cluster_desc}}.
@@ -17,7 +17,7 @@
 #' @importFrom lubridate hours days
 #' @importFrom stats setNames
 #' @importFrom stringr str_replace_all
-create_clusters <- function(calendar, clusters_desc, kd_cho, law_planned = "geometric", volatility_planned = 1, opts = simOptions()) {
+create_clusters_nuclear <- function(calendar, clusters_desc, kd_cho, law_planned = "geometric", volatility_planned = 1, opts = simOptions()) {
   
   # Modulation data
   modulation_list <- lapply(
